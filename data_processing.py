@@ -19,7 +19,7 @@ def trend(order_purchase_timestamp):
     orders['order_purchase_dayofweek_name'] = orders['order_purchase_timestamp'].dt.strftime('%a')
     orders['order_purchase_hour'] = orders['order_purchase_timestamp'].dt.hour
 
-    orders['InvoiceQuarter'] = ('Q' + orders['InvoiceDate_DT'].dt.quarter.astype(str) + '/' + orders['order_purchase_timestamp'].dt.year.astype(str))
+    orders['InvoiceQuarter'] = ('Q' + orders['order_purchase_timestamp'].dt.quarter.astype(str) + '/' + orders['order_purchase_timestamp'].dt.year.astype(str))
     quarters_map = dict(zip(orders['InvoiceQuarter'].unique(), range(len(orders['InvoiceQuarter'].unique()))))
     orders['InvoiceQuarterID'] = orders['InvoiceQuarter'].map(quarters_map)
 
