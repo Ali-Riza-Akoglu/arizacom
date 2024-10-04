@@ -1,5 +1,6 @@
 def cohort_m(df, customer_col, invoice_date_col):
     # InvoiceDate sütununu trend fonksiyonuna gönder
+    from .data_processing import trend
     trend_df = trend(df[invoice_date_col])
     
     # trend fonksiyonundan dönen DataFrame'deki invoice_quarter_col sütununu kullan
