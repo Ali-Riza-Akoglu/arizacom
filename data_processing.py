@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-def extract_time_features(order_purchase_timestamp):
+def trend(order_purchase_timestamp):
     # order_purchase_timestamp'ı datetime formatına çevir
     order_purchase_timestamp = pd.to_datetime(order_purchase_timestamp)
 

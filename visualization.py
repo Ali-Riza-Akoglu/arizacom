@@ -6,13 +6,13 @@ import seaborn as sns
 from matplotlib.gridspec import GridSpec
 import warnings
 
-def plot_ecommerce_analysis(order_purchase_timestamp, order_id_column=None):
+def trend_fig(order_purchase_timestamp, order_id_column=None):
     warnings.simplefilter(action='ignore', category=FutureWarning)
     warnings.simplefilter(action='ignore', category=UserWarning)
 
     # İlk fonksiyon olan extract_time_features'i burada çağırıyoruz
-    from .data_processing import extract_time_features
-    orders = extract_time_features(order_purchase_timestamp)
+    from .data_processing import trend
+    orders = trend(order_purchase_timestamp)
 
     # Eğer order_id sütunu verilmişse, onu kullan
     if order_id_column is not None:
@@ -63,3 +63,42 @@ def plot_ecommerce_analysis(order_purchase_timestamp, order_id_column=None):
 
     plt.tight_layout()  # Uyarıyı önlemek için layout ayarlarını burada yapıyoruz
     plt.show()
+
+def top_10(df, description_col, quantity_col, n=10):
+    # Group by the description column and sum the quantity
+    products = df.groupby(description_col, as_index=False)[quantity_col].agg('sum')
+    
+    # Sort in descending order based on the quantity and take the top 'n' products
+    top_products = products.sort_values(quantity_col, ascending=False).head(n)
+    
+    return top_products
+    
+def top_10_fig(df, description_col, quantity_col, n=10): 
+    import plotly.graph_objects as go
+
+    # 'top_10' fonksiyonundan dönen değeri 'top_products' değişkenine atıyoruz
+    top_products = top_10(df, description_col, quantity_col, n)
+
+    # Grafik oluşturma
+    fig = go.Figure(data=[
+        go.Bar(name=f'{n} Bestselling Products', 
+               x=top_products[description_col].astype(str), 
+               y=top_products[quantity_col],
+               marker_opacity=1,
+               marker={'color': top_products[quantity_col],
+                       'colorscale': 'Rainbow'})
+    ])
+
+    # Grafik görünümünü özelleştirme
+    fig.update_traces(texttemplate='%{y:.3s}', textposition='outside')
+    fig.update_layout(barmode='group', showlegend=False)
+
+    # Başlık ve eksen etiketlerini güncelleme
+    fig.update_layout(title=f'{n} Bestselling Products',
+                      title_x=0.45,
+                      xaxis_title="Products",
+                      yaxis_title="Total Quantity Sold",
+                      plot_bgcolor='white')
+
+    # Grafik gösterimi
+    fig.show()
