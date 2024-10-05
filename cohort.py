@@ -1,10 +1,9 @@
 def cohort_m(df, customer_col, invoice_date_col):
-    # InvoiceDate sütununu trend fonksiyonuna gönder
-    from .data_processing import trend
-    trend_df = trend(df[invoice_date_col])
-    
-    # trend fonksiyonundan dönen DataFrame'deki invoice_quarter_col sütununu kullan
-    df['InvoiceQuarterID'] = trend_df['InvoiceQuarter']
+   
+    orders['InvoiceQuarter'] = ('Q' + orders['invoice_date_col'].dt.quarter.astype(str) + '/' + orders['invoice_date_col'].dt.year.astype(str))
+    quarters_map = dict(zip(orders['InvoiceQuarter'].unique(), range(len(orders['InvoiceQuarter'].unique()))))
+    orders['InvoiceQuarterID'] = orders['InvoiceQuarter'].map(quarters_map)
+
     
     # Her müşteri için ilk fatura çeyrek kimliğini bul
     df['CohortQuarterID'] = df.groupby(customer_col)['InvoiceQuarterID'].transform('min')
