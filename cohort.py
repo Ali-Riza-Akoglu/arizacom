@@ -1,8 +1,8 @@
 def cohort_m(df, customer_col, invoice_date_col):
    
-    orders['InvoiceQuarter'] = ('Q' + orders['invoice_date_col'].dt.quarter.astype(str) + '/' + orders['invoice_date_col'].dt.year.astype(str))
-    quarters_map = dict(zip(orders['InvoiceQuarter'].unique(), range(len(orders['InvoiceQuarter'].unique()))))
-    orders['InvoiceQuarterID'] = orders['InvoiceQuarter'].map(quarters_map)
+    df['InvoiceQuarter'] = ('Q' + df['invoice_date_col'].dt.quarter.astype(str) + '/' + df['invoice_date_col'].dt.year.astype(str))
+    quarters_map = dict(zip(df['InvoiceQuarter'].unique(), range(len(df['InvoiceQuarter'].unique()))))
+    df['InvoiceQuarterID'] = df['InvoiceQuarter'].map(quarters_map)
 
     
     # Her müşteri için ilk fatura çeyrek kimliğini bul
