@@ -1,6 +1,6 @@
+import pandas as pd
+import plotly.graph_objects as go
 def cohort(df, customer_id, invoice_date):
-    import pandas as pd
-    import plotly.graph_objects as go
     df['InvoiceQuarter'] = ('Q' + df[invoice_date].dt.quarter.astype(str) + 
                             '/' + df[invoice_date].dt.year.astype(str))
     
